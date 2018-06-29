@@ -113,7 +113,7 @@ void decrypt(const char *szKey, const char *szSign, string szSrcFile, string szO
 	string strOld = ".luac";
 	string strNew = ".lua";
 	string strEnd = szOutFile.substr(szOutFile.length() - strOld.length(), strOld.length());
-	string str = "";
+	string str = szOutFile;
 	if (strEnd == strOld)
 	{
 		str = szOutFile.substr(0, szOutFile.length() - strOld.length()) + strNew;
