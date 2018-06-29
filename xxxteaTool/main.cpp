@@ -8,32 +8,32 @@
 
 //void main()
 //{
-//	//»ñÈ¡Ä¿Â¼Ãû  
+//	//è·å–ç›®å½•å  
 //	char buf[256];
-//	printf("ÇëÊäÈëÒªÍ³¼ÆµÄÄ¿Â¼Ãû:");
+//	printf("è¯·è¾“å…¥è¦ç»Ÿè®¡çš„ç›®å½•å:");
 //	gets(buf);
 //
-//	//¹¹ÔìÀà¶ÔÏó  
+//	//æ„é€ ç±»å¯¹è±¡  
 //	CStatDir statdir;
 //
-//	//ÉèÖÃÒª±éÀúµÄÄ¿Â¼  
+//	//è®¾ç½®è¦éå†çš„ç›®å½•  
 //	if (!statdir.SetInitDir(buf))
 //	{
-//		puts("Ä¿Â¼²»´æÔÚ¡£");
+//		puts("ç›®å½•ä¸å­˜åœ¨ã€‚");
 //		return;
 //	}
 //
-//	//¿ªÊ¼±éÀú  
+//	//å¼€å§‹éå†  
 //
 //	vector<string>file_vec = statdir.BeginBrowseFilenames("*.*");
 //	for (vector<string>::const_iterator it = file_vec.begin(); it < file_vec.end(); ++it)
 //		std::cout << *it << std::endl;
 //
-//	printf("ÎÄ¼ş×ÜÊı: %d\n", file_vec.size());
+//	printf("æ–‡ä»¶æ€»æ•°: %d\n", file_vec.size());
 //	system("pause");
 //}
 
-// ¼ÓÃÜÎÄ¼ş
+// åŠ å¯†æ–‡ä»¶
 void encrypt(const char *szKey, const char *szSign, string szSrcFile, string szOutFile)
 {
 	FILE *fp;
@@ -78,7 +78,7 @@ void encrypt(const char *szKey, const char *szSign, string szSrcFile, string szO
 	printf("%s encrypt successful\n", szSrcFile.c_str());
 }
 
-// ½âÃÜÎÄ¼ş
+// è§£å¯†æ–‡ä»¶
 void decrypt(const char *szKey, const char *szSign, string szSrcFile, string szOutFile)
 {
 	FILE *fp;
@@ -98,7 +98,7 @@ void decrypt(const char *szKey, const char *szSign, string szSrcFile, string szO
 	xxtea_long nKeylen = strlen(szKey);
 	xxtea_long nSignLen = strlen(szSign);
 	xxtea_long nRetlen = 0;
-	// Èç¹û¼ÓÃÜµÄÊı¾İ×î¿ªÊ¼¼¸¸ö×Ö½ÚÈç¹ûÓëÇ©Ãû²»Ïà·û£¬Ôò²»ÊÇ¼ÓÃÜµÄÊı¾İ
+	// å¦‚æœåŠ å¯†çš„æ•°æ®æœ€å¼€å§‹å‡ ä¸ªå­—èŠ‚å¦‚æœä¸ç­¾åä¸ç›¸ç¬¦ï¼Œåˆ™ä¸æ˜¯åŠ å¯†çš„æ•°æ®
 	if (strncmp((const char*)buf, (const char*)szSign, nSignLen) != 0)
 	{
 		return;
@@ -110,7 +110,15 @@ void decrypt(const char *szKey, const char *szSign, string szSrcFile, string szO
 		printf("%s decrypt fail\n", szSrcFile.c_str());
 		return;
 	}
-	if ((err = fopen_s(&fp, szOutFile.c_str(), "wb+")) != 0)
+	string strOld = ".luac";
+	string strNew = ".lua";
+	string strEnd = szOutFile.substr(szOutFile.length() - strOld.length(), strOld.length());
+	string str = "";
+	if (strEnd == strOld)
+	{
+		str = szOutFile.substr(0, szOutFile.length() - strOld.length()) + strNew;
+	}
+	if ((err = fopen_s(&fp, str.c_str(), "wb+")) != 0)
 	{
 		perror("can't open the output file");
 		return;
@@ -152,18 +160,18 @@ int main(int argc, char *argv[])
 		szExclude = argv[6];
 	}
 
-	//¹¹ÔìÀà¶ÔÏó  
+	//æ„é€ ç±»å¯¹è±¡  
 	CStatDir statdir;
 
 	char szOutDir[_MAX_PATH] = { 0 };
-	//ÓÃµ±Ç°Ä¿Â¼³õÊ¼»¯  
+	//ç”¨å½“å‰ç›®å½•åˆå§‹åŒ–  
 	_getcwd(szOutDir, _MAX_PATH);
-	//ÏÈ°Ñdir×ª»»Îª¾ø¶ÔÂ·¾¶
+	//å…ˆæŠŠdirè½¬æ¢ä¸ºç»å¯¹è·¯å¾„
 	if (_fullpath(szOutDir, szOutFile, _MAX_PATH) == NULL)
 	{
 		return false;
 	}
-	//Èç¹ûÄ¿Â¼µÄ×îºóÒ»¸ö×ÖÄ¸²»ÊÇ'\',ÔòÔÚ×îºó¼ÓÉÏÒ»¸ö'\'  
+	//å¦‚æœç›®å½•çš„æœ€åä¸€ä¸ªå­—æ¯ä¸æ˜¯'\',åˆ™åœ¨æœ€ååŠ ä¸Šä¸€ä¸ª'\'  
 	int nOutLen = strlen(szOutDir);
 	if (szOutDir[nOutLen - 1] != '\\')
 	{
@@ -171,14 +179,14 @@ int main(int argc, char *argv[])
 	}
 
 	char szInDir[_MAX_PATH] = { 0 };
-	//ÓÃµ±Ç°Ä¿Â¼³õÊ¼»¯  
+	//ç”¨å½“å‰ç›®å½•åˆå§‹åŒ–  
 	_getcwd(szInDir, _MAX_PATH);
-	//ÏÈ°Ñdir×ª»»Îª¾ø¶ÔÂ·¾¶
+	//å…ˆæŠŠdirè½¬æ¢ä¸ºç»å¯¹è·¯å¾„
 	if (_fullpath(szInDir, szSrcFile, _MAX_PATH) == NULL)
 	{
 		return false;
 	}
-	//Èç¹ûÄ¿Â¼µÄ×îºóÒ»¸ö×ÖÄ¸²»ÊÇ'\',ÔòÔÚ×îºó¼ÓÉÏÒ»¸ö'\'  
+	//å¦‚æœç›®å½•çš„æœ€åä¸€ä¸ªå­—æ¯ä¸æ˜¯'\',åˆ™åœ¨æœ€ååŠ ä¸Šä¸€ä¸ª'\'  
 	int nInLen = strlen(szInDir);
 	if (szInDir[nInLen - 1] != '\\')
 	{
@@ -186,17 +194,17 @@ int main(int argc, char *argv[])
 	}
 
 	printf("%d , szInDir=%s,szOutDir=%s,bEncrypt=%d", argc, szInDir, szOutDir, bEncrypt);
-	//ÉèÖÃÒª±éÀúµÄÄ¿Â¼  
+	//è®¾ç½®è¦éå†çš„ç›®å½•  
 	if (!statdir.SetInitDir(szInDir))
 	{
-		puts("Ä¿Â¼²»´æÔÚ¡£");
+		puts("ç›®å½•ä¸å­˜åœ¨ã€‚");
 		return -1;
 	}
 	printf("%d , szInDir=%s,szOutDir=%s,bEncrypt=%d", argc, szInDir, szOutDir, bEncrypt);
 
-	// É¾³ıÄ¿Â¼
+	// åˆ é™¤ç›®å½•
 	statdir.DeleteDirectory(szOutDir);
-	// ´´½¨Ä¿Â¼
+	// åˆ›å»ºç›®å½•
 	statdir.CreateDirectory(szOutDir);
 
 	std::map<string, bool> vExcludeFile;
@@ -219,13 +227,13 @@ int main(int argc, char *argv[])
 		//string szSrcPath(*it, 0, pos);
 		string szSrcFileName(it->substr(pos));
 
-		// Êä³öÄ¿Â¼
+		// è¾“å‡ºç›®å½•
 		string szOutPath(szOutDir);
 		szOutPath.append(it->substr(strlen(szInDir)));
 
 		statdir.CreateDirectory(szOutPath.c_str());
 
-		// ÅÅ³ıÎÄ¼ş
+		// æ’é™¤æ–‡ä»¶
 		if (vExcludeFile.find(szSrcFileName) != vExcludeFile.end())
 		{
 			CopyFileA(it->c_str(), szOutPath.c_str(), false);
@@ -234,12 +242,12 @@ int main(int argc, char *argv[])
 		
 		if (bEncrypt)
 		{
-			// ¼ÓÃÜ
+			// åŠ å¯†
 			encrypt(szKey, szSign, *it, szOutPath.c_str());
 		}
 		else
 		{
-			// ½âÃÜ
+			// è§£å¯†
 			decrypt(szKey, szSign, *it, szOutPath.c_str());
 		}
 	}
